@@ -24,7 +24,7 @@ router.post('/users', async (req, res) => {
 });
 
 function isValidWallet(wallet) {
-    const regex = /^[a-zA-Z]{30,50}$/; 
+    const regex = /^[a-zA-Z0-9]{30,50}$/; 
     return regex.test(wallet);
 }
 
