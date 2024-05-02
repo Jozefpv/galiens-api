@@ -15,16 +15,16 @@ router.post('/users', async (req, res) => {
     const userSnapshot = await userRef.get();
     const userData = userSnapshot.data();
 
-    if (!userData || points > (userData.points || 0)) {
+    if (!userData || validatedPoints > (userData.points || 0)) {
         await userRef.set(
             {
                 id: wallet,
-                points: points
+                points: validatedPoints
             },
             { merge: true }
         );
 
-        res.status(201).json({ id: wallet, points: points, message: 'Usuario creado o actualizado exitosamente' });
+        res.status(201).json({ id: wallet, points: validatedPoints, message: 'Usuario creado o actualizado exitosamente' });
     } else {
         res.status(400).json({ error: 'Los puntos proporcionados no son mayores que los puntos actuales del usuario' });
     }
