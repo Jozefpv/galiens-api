@@ -59,7 +59,9 @@ router.get('/ranking', async (req, res) => {
 
         ranking.sort((a, b) => b.points - a.points);
 
-        res.status(200).json({ ranking });
+        const top10 = ranking.slice(0, 10);
+
+        res.status(200).json({ ranking: top10 });
     } catch (error) {
         console.error('Error al obtener ranking:', error);
         res.status(500).json({ mensaje: 'Error en la API' });
