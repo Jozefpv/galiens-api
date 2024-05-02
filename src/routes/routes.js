@@ -11,16 +11,22 @@ router.post('/users', async (req, res) => {
     }
 
     const userRef = db.collection('users').doc(wallet);
-    await userRef.set(
-      {
-        id: wallet,
-        points: points
-      },
-      { merge: true }
-    );
+    const userSnapshot = await userRef.get();
+    const userData = userSnapshot.data();
 
-    res.status(201).json({ id: wallet, points: points, message: 'Usuario creado o actualizado exitosamente' });
+    if (!userData || points > (userData.points || 0)) {
+        await userRef.set(
+            {
+                id: wallet,
+                points: points
+            },
+            { merge: true }
+        );
 
+        res.status(201).json({ id: wallet, points: points, message: 'Usuario creado o actualizado exitosamente' });
+    } else {
+        res.status(400).json({ error: 'Los puntos proporcionados no son mayores que los puntos actuales del usuario' });
+    }
 });
 
 function isValidWallet(wallet) {
