@@ -5,10 +5,11 @@ const {db} = require('../controllers/firebase.js')
 router.post('/users', async (req, res) => {
     const { points, wallet } = req.body;
 
-    // Validar que wallet tenga entre 16 y 32 letras
     if (!isValidWallet(wallet)) {
         return res.status(400).json({ error: 'El formato de la wallet no es válido' });
     }
+
+    const validatedPoints = Math.max(0, points);
 
     const userRef = db.collection('users').doc(wallet);
     const userSnapshot = await userRef.get();
